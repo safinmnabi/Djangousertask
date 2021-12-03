@@ -18,14 +18,12 @@ def Signin(request):
 			request.session['user'] = email
 			request.session['isLogged'] = True
 			return redirect('Index')
-		else:
-			return HttpResponse('Please enter valid Username or Password.')
+		return HttpResponse('Please enter valid Username or Password.')
 	else:
 		request.session['isLogged'] = False
 		if request.session['isLogged']:
 			return redirect('Signin')
-		else:
-			return render(request, 'Signin.html' )
+		return render(request, 'Signin.html' )
 
 def Signup(request):
 	if request.method == 'POST':
@@ -35,10 +33,9 @@ def Signup(request):
 		if User.objects.filter(email=email).count()>0:
 			# messages.info(request, 'Email already exists.')
 			return render(request, "signup.html", {'messages':'Email already exists.','status':'error'})
-		else:
-			user = User(email=email, password=password)
-			user.save()
-			return redirect('Signin')
+		user = User(email=email, password=password)
+		user.save()
+		return redirect('Signin')
 	return render(request, "signup.html")
 
 def Signout(request):
@@ -68,8 +65,7 @@ def Update(request, id):
 		form = PersonForm(request.POST, instance=sel)
 		form.save()
 		return redirect('Index')
-	else:
-		form = PersonForm(instance=sel)
+	form = PersonForm(instance=sel)
 	return render(request, 'add.html', {'form': sel, 'eid':request.session['user']})
 
 def Delete(request, id):
@@ -100,8 +96,7 @@ def Taskupdate(request, id, tid):
 		form = TaskForm(request.POST, instance=sel)
 		form.save()
 		return redirect('Taskdetail', id)
-	else:
-		form= Task.objects.get(id=tid)
+	form= Task.objects.get(id=tid)
 	return render(request, 'taskcreate.html', {'data':form, 'pid':id})
 
 def Taskdelete(request, id, tid):
